@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Finance Flare</title>
 
-  <!-- Bootstrap, AOS, Chart.js -->
+  <!-- Bootstrap, AOS, Chart.js, Font Awesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -72,6 +73,15 @@
     @keyframes scroll-left {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-100%); }
+    }
+    .social-icons a {
+      transition: transform 0.3s ease, color 0.3s;
+      font-size: 1.5rem;
+      margin: 0 10px;
+    }
+    .social-icons a:hover {
+      transform: scale(1.2);
+      opacity: 0.9;
     }
   </style>
 </head>
@@ -152,10 +162,27 @@
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- Footer with Social Links -->
   <footer>
-    <div class="container">
+    <div class="container text-center">
       <p>© 2025 Finance Flare — Built with 💻 + 💡 by a solo builder</p>
+      <div class="mt-3 d-flex justify-content-center social-icons">
+        <a href="https://youtube.com/@Pkedu511" target="_blank" class="text-danger" title="YouTube">
+          <i class="fab fa-youtube"></i>
+        </a>
+        <a href="https://www.instagram.com/pr.ashant07261/" target="_blank" class="text-pink" title="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="text-success" title="WhatsApp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://linkedin.com/in/prashant-kumar-621ab027a/" target="_blank" class="text-primary" title="LinkedIn">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="https://twitter.com/YourHandle" target="_blank" class="text-info" title="Twitter">
+          <i class="fab fa-x-twitter"></i>
+        </a>
+      </div>
     </div>
   </footer>
 
@@ -165,7 +192,6 @@
   <script>
     AOS.init();
 
-    // SIP Chart logic
     let sipChart, sipPieChart;
 
     function calcSIP() {
@@ -185,7 +211,6 @@
       const monthlySIP = sip;
 
       let data = [], labels = [], invested = 0, value = 0;
-
       for (let i = 1; i <= n; i++) {
         value = value * (1 + r) + monthlySIP;
         invested += monthlySIP;
@@ -209,7 +234,8 @@
       if (sipChart) sipChart.destroy();
       if (sipPieChart) sipPieChart.destroy();
 
-      sipChart = new Chart(document.getElementById('sipChart').getContext('2d'), {
+      const ctx = document.getElementById('sipChart').getContext('2d');
+      sipChart = new Chart(ctx, {
         type: 'line',
         data: {
           labels: labels.filter((_, i) => i % 6 === 0),
@@ -226,18 +252,14 @@
         options: {
           responsive: true,
           scales: {
-            y: {
-              beginAtZero: true,
-              title: { display: true, text: "₹ Value" }
-            },
-            x: {
-              title: { display: true, text: "Time (Months)" }
-            }
+            y: { beginAtZero: true },
+            x: {}
           }
         }
       });
 
-      sipPieChart = new Chart(document.getElementById('sipPie').getContext('2d'), {
+      const ctxPie = document.getElementById('sipPie').getContext('2d');
+      sipPieChart = new Chart(ctxPie, {
         type: 'pie',
         data: {
           labels: ["Invested", "Returns"],
@@ -247,14 +269,11 @@
           }]
         },
         options: {
-          plugins: {
-            legend: { position: 'bottom' }
-          }
+          plugins: { legend: { position: 'bottom' } }
         }
       });
     }
 
-    // Emergency Fund
     function calcEmergency() {
       const expense = parseFloat(document.getElementById('monthlyExpense').value);
       const months = parseInt(document.getElementById('monthsBuffer').value);
@@ -266,7 +285,6 @@
       document.getElementById('emergencyResult').innerText = `Recommended Fund: ₹${total.toLocaleString()}`;
     }
 
-    // Goal Timeline
     function calcTimeline() {
       const monthly = parseFloat(document.getElementById('monthlyInvestment').value);
       const goal = parseFloat(document.getElementById('targetGoal').value);
@@ -285,9 +303,8 @@
       document.getElementById('timelineResult').innerText = `You will reach your goal in ~${years}y ${remainingMonths}m`;
     }
 
-    // 🎯 Live News Fetcher
     async function loadNews() {
-      const newsKey = pub_bea83d50cf14422f86122b4da2a19179; // 🔁 Replace with your real key from newsdata.io
+      const newsKey = "YOUR_API_KEY_HERE"; // 🔁 Replace this
       try {
         const res = await fetch(`https://newsdata.io/api/1/news?apikey=${newsKey}&q=finance&country=in&language=en`);
         const data = await res.json();
@@ -299,9 +316,9 @@
         }
       } catch (err) {
         document.getElementById("newsText").innerText = "Unable to load news.";
-        console.error("News fetch error:", err);
       }
     }
+
     loadNews();
   </script>
 </body>
