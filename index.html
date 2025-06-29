@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Finance Flare</title>
+
+  <!-- Bootstrap, AOS, Chart.js -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #f1f1f1;
+    }
+    .hero {
+      background: linear-gradient(to right, #1f4037, #99f2c8);
+      color: #fff;
+      padding: 100px 20px 50px;
+      text-align: center;
+    }
+    .card {
+      border: none;
+      border-radius: 16px;
+      background-color: #1e1e1e;
+      color: white;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+    }
+    .btn-custom {
+      background-color: #00c896;
+      border: none;
+      color: #fff;
+      transition: 0.3s ease;
+    }
+    .btn-custom:hover {
+      background-color: #00a87c;
+    }
+    footer {
+      background: #1a1a1a;
+      padding: 30px 0;
+      color: #aaa;
+      text-align: center;
+    }
+    input, button, select {
+      border-radius: 10px !important;
+    }
+    canvas {
+      margin-top: 20px;
+      height: 120px !important;
+      max-height: 150px;
+    }
+    .news-ticker {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative;
+    }
+    #newsText {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll-left 20s linear infinite;
+    }
+    @keyframes scroll-left {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1 data-aos="fade-up">Finance Flare</h1>
+      <p class="lead" data-aos="fade-up" data-aos-delay="100">Smarter money, simplified by tech.</p>
+      <p data-aos="fade-up" data-aos-delay="200">SIP calculator, financial education, AI finance tools — all in one platform.</p>
+
+      <div class="news-ticker mt-4 p-2 rounded">
+        <strong>📰 Latest News: </strong>
+        <span id="newsText">Loading news...</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools Section -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-5" data-aos="fade-up">🛠 Finance Tools</h2>
+      <div class="row g-4">
+
+        <!-- SIP Calculator -->
+        <div class="col-md-12" data-aos="fade-up">
+          <div class="card p-4">
+            <h5>📈 Advanced SIP Calculator</h5>
+            <input type="number" id="goal" class="form-control my-2" placeholder="Goal Amount (₹)">
+            <input type="number" id="sipYears" class="form-control my-2" placeholder="Investment Duration (Years)">
+            <input type="number" id="expectedReturn" class="form-control my-2" placeholder="Expected Annual Return (%)" value="12">
+            <button class="btn btn-custom w-100" onclick="calcSIP()">Calculate</button>
+            <div id="sipResult" class="mt-3 text-info"></div>
+            <div id="chartArea" style="display: none;">
+              <canvas id="sipChart"></canvas>
+              <canvas id="sipPie" class="mt-3"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emergency Fund Estimator -->
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="card p-4">
+            <h5>🛟 Emergency Fund Estimator</h5>
+            <input type="number" id="monthlyExpense" class="form-control my-2" placeholder="Monthly Expenses">
+            <select id="monthsBuffer" class="form-select my-2">
+              <option value="3">3 Months</option>
+              <option value="6" selected>6 Months</option>
+              <option value="12">12 Months</option>
+            </select>
+            <button class="btn btn-custom w-100" onclick="calcEmergency()">Estimate</button>
+            <p id="emergencyResult" class="mt-2 text-info"></p>
+          </div>
+        </div>
+
+        <!-- Goal Timeline -->
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
+          <div class="card p-4">
+            <h5>📅 Goal Timeline Estimator</h5>
+            <input type="number" id="monthlyInvestment" class="form-control my-2" placeholder="Monthly Investment (₹)">
+            <input type="number" id="targetGoal" class="form-control my-2" placeholder="Target Goal (₹)">
+            <button class="btn btn-custom w-100" onclick="calcTimeline()">Estimate Time</button>
+            <p id="timelineResult" class="mt-2 text-info"></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="text-center py-5" style="background-color:#101820;">
+    <div class="container">
+      <h3 data-aos="fade-up">Building in public. 🚀</h3>
+      <p data-aos="fade-up" data-aos-delay="100">Follow the journey or message me if you’re curious.</p>
+      <a href="#" class="btn btn-custom mt-2 px-4" data-aos="zoom-in" data-aos-delay="200">Contact Me</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>© 2025 Finance Flare — Built with 💻 + 💡 by a solo builder</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+
+    // SIP Chart logic
+    let sipChart, sipPieChart;
+
+    function calcSIP() {
+      const goal = parseFloat(document.getElementById('goal').value);
+      const years = parseFloat(document.getElementById('sipYears').value);
+      const expectedReturn = parseFloat(document.getElementById('expectedReturn').value);
+      const annualRate = expectedReturn / 100;
+      const r = annualRate / 12;
+      const n = years * 12;
+
+      if (!goal || !years || !expectedReturn) {
+        document.getElementById('sipResult').innerHTML = "<span style='color: #f66;'>Enter valid inputs.</span>";
+        return;
+      }
+
+      const sip = goal * r / ((Math.pow(1 + r, n) - 1));
+      const monthlySIP = sip;
+
+      let data = [], labels = [], invested = 0, value = 0;
+
+      for (let i = 1; i <= n; i++) {
+        value = value * (1 + r) + monthlySIP;
+        invested += monthlySIP;
+        data.push(Math.round(value));
+        labels.push("Month " + i);
+      }
+
+      const gain = value - invested;
+      const returnPercent = (gain / invested) * 100;
+
+      document.getElementById('sipResult').innerHTML = `
+        <strong>Monthly SIP:</strong> ₹${monthlySIP.toFixed(2)}<br>
+        <strong>Total Invested:</strong> ₹${invested.toFixed(0)}<br>
+        <strong>Final Value:</strong> ₹${value.toFixed(0)}<br>
+        <strong>Gain:</strong> ₹${gain.toFixed(0)}<br>
+        <strong>Return:</strong> <span style="color:#00ff99">${returnPercent.toFixed(2)}%</span>
+      `;
+
+      document.getElementById("chartArea").style.display = "block";
+
+      if (sipChart) sipChart.destroy();
+      if (sipPieChart) sipPieChart.destroy();
+
+      sipChart = new Chart(document.getElementById('sipChart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: labels.filter((_, i) => i % 6 === 0),
+          datasets: [{
+            label: "Wealth Over Time",
+            data: data,
+            borderColor: "#00c896",
+            backgroundColor: "rgba(0,200,150,0.1)",
+            tension: 0.3,
+            fill: true,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: { display: true, text: "₹ Value" }
+            },
+            x: {
+              title: { display: true, text: "Time (Months)" }
+            }
+          }
+        }
+      });
+
+      sipPieChart = new Chart(document.getElementById('sipPie').getContext('2d'), {
+        type: 'pie',
+        data: {
+          labels: ["Invested", "Returns"],
+          datasets: [{
+            data: [invested.toFixed(0), gain.toFixed(0)],
+            backgroundColor: ["#007bff", "#28a745"]
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { position: 'bottom' }
+          }
+        }
+      });
+    }
+
+    // Emergency Fund
+    function calcEmergency() {
+      const expense = parseFloat(document.getElementById('monthlyExpense').value);
+      const months = parseInt(document.getElementById('monthsBuffer').value);
+      if (!expense || !months) {
+        document.getElementById('emergencyResult').innerText = "Enter valid inputs.";
+        return;
+      }
+      const total = expense * months;
+      document.getElementById('emergencyResult').innerText = `Recommended Fund: ₹${total.toLocaleString()}`;
+    }
+
+    // Goal Timeline
+    function calcTimeline() {
+      const monthly = parseFloat(document.getElementById('monthlyInvestment').value);
+      const goal = parseFloat(document.getElementById('targetGoal').value);
+      if (!monthly || !goal) {
+        document.getElementById('timelineResult').innerText = "Enter valid inputs.";
+        return;
+      }
+      const r = 0.01;
+      let futureValue = 0, months = 0;
+      while (futureValue < goal) {
+        futureValue = futureValue * (1 + r) + monthly;
+        months++;
+      }
+      const years = Math.floor(months / 12);
+      const remainingMonths = months % 12;
+      document.getElementById('timelineResult').innerText = `You will reach your goal in ~${years}y ${remainingMonths}m`;
+    }
+
+    // 🎯 Live News Fetcher
+    async function loadNews() {
+      const newsKey = pub_bea83d50cf14422f86122b4da2a19179; // 🔁 Replace with your real key from newsdata.io
+      try {
+        const res = await fetch(`https://newsdata.io/api/1/news?apikey=${newsKey}&q=finance&country=in&language=en`);
+        const data = await res.json();
+        if (data.results && data.results.length > 0) {
+          const headlines = data.results.map(article => article.title).slice(0, 5);
+          document.getElementById("newsText").innerText = headlines.join(" ⚡ ");
+        } else {
+          document.getElementById("newsText").innerText = "No latest financial news available.";
+        }
+      } catch (err) {
+        document.getElementById("newsText").innerText = "Unable to load news.";
+        console.error("News fetch error:", err);
+      }
+    }
+    loadNews();
+  </script>
+</body>
+</html>
